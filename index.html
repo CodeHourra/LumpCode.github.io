@@ -87,11 +87,70 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="与React对比"><a href="#与React对比" class="headerlink" title="与React对比"></a>与React对比</h2><ul>
+<li>速度:react会先更新虚拟dom,再和实际dom进行对比 angular与之不相上下</li>
+<li>FLUX架构:组件化 数据单向更新</li>
+<li>服务器端渲染 预渲染 seo优化</li>
+</ul>
+<h2 id="与vue对比"><a href="#与vue对比" class="headerlink" title="与vue对比"></a>与vue对比</h2><ul>
+<li>个人主导(angular为google开发,号召力资金充足,vue相对来说有些不足)</li>
+<li>只关注web(angular还可以开发客户端应用)</li>
+<li>服务器端渲染(vue通过第三方库,angular有官方库)</li>
+</ul>
+<h2 id="angular程序架构"><a href="#angular程序架构" class="headerlink" title="angular程序架构"></a>angular程序架构</h2><p><img src="D:/Angular/img/angular%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84.png" alt="angular程序架构"></p>
+<p><strong>组件</strong>:是Angular应用的基本构建块,你可以把一个组件理解为一段带有业务逻辑和数据的html</p>
+<p><strong>服务</strong>:用来封装可重用的业务逻辑</p>
+<p><strong>指令</strong>:允许你向html中添加自定义行为</p>
+<p><strong>模块</strong>:用来将应用中不同的部分组织成一个Angular框架可以理解的单元</p>
+<p><strong>组件、服务、模块是为了完成某些功能的,模块是为了打包、分发这些功能的.</strong></p>
+<h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><p><strong>组件(Component)必备三要素</strong>:</p>
+<ul>
+<li>装饰器( @Component() ):</li>
+<li>模版(Template)</li>
+<li>控制器(Controller)</li>
+<li>控制器←→控制器进行数据绑定</li>
+</ul>
+<p>:插值表达式</p>
+<h3 id="启动angular应用"><a href="#启动angular应用" class="headerlink" title="启动angular应用"></a>启动angular应用</h3><blockquote>
+<ol>
+<li>启动时加载了哪个页面?</li>
+<li>启动时加载了哪些脚本?</li>
+<li>这些脚本做了什么事?</li>
+</ol>
+</blockquote>
+<h3 id="如何引用第三方类库-2-5-开发准备"><a href="#如何引用第三方类库-2-5-开发准备" class="headerlink" title="如何引用第三方类库(2-5)开发准备"></a>如何引用第三方类库(2-5)开发准备</h3><ol>
+<li>npm install 安装到本地库 package.json -&gt; dependencies</li>
+<li>引入到项目中 angular6 后在angular.json中在styles/script中分别引入,之前的版本在angular-cli.json中</li>
+<li>npm install @types/jquery -D 安装jquery的ts类型描述文件,npm i @types/bootstrap -D安装bootstrap的ts类型描述文件</li>
+</ol>
+<h3 id="组件开发"><a href="#组件开发" class="headerlink" title="组件开发"></a>组件开发</h3><ol>
+<li>App组件</li>
+<li>导航栏组件</li>
+<li>页脚组件</li>
+<li>搜索表单组件</li>
+<li>轮播图组件</li>
+<li>商品展示组件</li>
+<li>星级评价组件 *ngFor:指令</li>
+</ol>
+<p>命令自动生成组件 ng g component xxx 在当前项目下生成组件</p>
+<h3 id="商品展示组件"><a href="#商品展示组件" class="headerlink" title="商品展示组件"></a>商品展示组件</h3><p>重点:<strong>angular始终是根据后台数据的变化来生成页面的,而不是去操纵dom元素</strong></p>
+<p>bootstrap元素居中:<br>在bootstrap中实现元素居中的方法主要有这几种：</p>
+<ol>
+<li>加类.text-center（子元素居中）</li>
+<li>加类.center-block（自身居中）</li>
+<li>利用bootstrap中列偏移的概念。例如：col-md-offset-2(外边距向右偏移两列)</li>
+</ol>
+<h3 id="数据绑定"><a href="#数据绑定" class="headerlink" title="数据绑定"></a>数据绑定</h3><ol>
+<li>通过插值表达式  直接将对象的属性展示出来</li>
+<li>属性绑定:<img [src]="imgUrl" alt="商品图片"> 通过[]将标签属性绑定控制器的属性</li>
+<li>样式绑定: [class.glyphicon-star-empty]=”star”  前面的class表示的是我后面要绑定的是一个class样式这个样式是由star的值决定的,star为true时会多出这么个样式,反之则不会</li>
+<li>属性传递:</li>
+</ol>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/04/Angular-与其他前端框架的对比/" data-id="cjmund7f50001h4pqiw0fbf8x" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/04/Angular-与其他前端框架的对比/" data-id="cjmunk5sr0000vspq4ytt2zoy" class="article-share-link">Share</a>
       
       
     </footer>
@@ -138,7 +197,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/04/如何在路由中传递参数/" data-id="cjmund7fd0003h4pq6oflhbzt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/04/如何在路由中传递参数/" data-id="cjmunk5t70002vspqkoiuwq20" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Angular6/">Angular6</a></li></ul>
@@ -176,7 +235,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/04/我个人博客的第一篇博客，加油/" data-id="cjmund7fb0002h4pqwt2zv7an" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/04/我个人博客的第一篇博客，加油/" data-id="cjmunk5ta0003vspq2ue8wl3e" class="article-share-link">Share</a>
       
       
     </footer>
@@ -221,7 +280,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/04/hello-world/" data-id="cjmund7eu0000h4pq5qsgrtum" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/04/hello-world/" data-id="cjmunk5t10001vspqmn3tozzs" class="article-share-link">Share</a>
       
       
     </footer>
