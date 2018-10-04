@@ -7,18 +7,18 @@
   
   <title>路由中传递参数 | 温良恭俭让</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="路由中传递参数 修改路由配置中的path属性,使其可以携带参数 path: &amp;#39;product/:id&amp;#39; path的参数后加上 /:id 名为id变量  12345678910111213141516const routes: Routes = [  &amp;#123;path: &apos;&apos;, redirectTo: &apos;/home&apos;, pathMatch: &apos;full&apos;&amp;#125;,  &amp;#12">
+  <meta name="description" content="修改路由配置中的path属性,使其可以携带参数 path: &amp;#39;product/:id&amp;#39; path的参数后加上 /:id 名为id变量  12345678910111213141516const routes: Routes = [  &amp;#123;path: &apos;&apos;, redirectTo: &apos;/home&apos;, pathMatch: &apos;full&apos;&amp;#125;,  &amp;#123;path:">
 <meta name="keywords" content="Angular6">
 <meta property="og:type" content="article">
 <meta property="og:title" content="路由中传递参数">
 <meta property="og:url" content="http://yoursite.com/2018/10/04/如何在路由中传递参数/index.html">
 <meta property="og:site_name" content="温良恭俭让">
-<meta property="og:description" content="路由中传递参数 修改路由配置中的path属性,使其可以携带参数 path: &amp;#39;product/:id&amp;#39; path的参数后加上 /:id 名为id变量  12345678910111213141516const routes: Routes = [  &amp;#123;path: &apos;&apos;, redirectTo: &apos;/home&apos;, pathMatch: &apos;full&apos;&amp;#125;,  &amp;#12">
+<meta property="og:description" content="修改路由配置中的path属性,使其可以携带参数 path: &amp;#39;product/:id&amp;#39; path的参数后加上 /:id 名为id变量  12345678910111213141516const routes: Routes = [  &amp;#123;path: &apos;&apos;, redirectTo: &apos;/home&apos;, pathMatch: &apos;full&apos;&amp;#125;,  &amp;#123;path:">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-10-04T13:55:08.523Z">
+<meta property="og:updated_time" content="2018-10-04T13:56:48.848Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="路由中传递参数">
-<meta name="twitter:description" content="路由中传递参数 修改路由配置中的path属性,使其可以携带参数 path: &amp;#39;product/:id&amp;#39; path的参数后加上 /:id 名为id变量  12345678910111213141516const routes: Routes = [  &amp;#123;path: &apos;&apos;, redirectTo: &apos;/home&apos;, pathMatch: &apos;full&apos;&amp;#125;,  &amp;#12">
+<meta name="twitter:description" content="修改路由配置中的path属性,使其可以携带参数 path: &amp;#39;product/:id&amp;#39; path的参数后加上 /:id 名为id变量  12345678910111213141516const routes: Routes = [  &amp;#123;path: &apos;&apos;, redirectTo: &apos;/home&apos;, pathMatch: &apos;full&apos;&amp;#125;,  &amp;#123;path:">
   
     <link rel="alternate" href="/atom.xml" title="温良恭俭让" type="application/atom+xml">
   
@@ -87,7 +87,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="路由中传递参数"><a href="#路由中传递参数" class="headerlink" title="路由中传递参数"></a>路由中传递参数</h1><ol>
+        <ol>
 <li>修改路由配置中的path属性,使其可以携带参数 <code>path: &#39;product/:id&#39;</code> path的参数后加上 <code>/:id</code> 名为id变量</li>
 </ol>
 <figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> routes: Routes = [</span><br><span class="line">  &#123;path: <span class="string">''</span>, redirectTo: <span class="string">'/home'</span>, pathMatch: <span class="string">'full'</span>&#125;,</span><br><span class="line">  &#123;path: <span class="string">'chat'</span>, component: ChatComponent, outlet: <span class="string">'aux'</span>&#125;,</span><br><span class="line">  &#123;path: <span class="string">'home'</span>, component: HomeComponent&#125;,</span><br><span class="line"></span><br><span class="line">  &#123;path: <span class="string">'product/:id'</span>, component: ProductComponent,</span><br><span class="line">    children: [</span><br><span class="line">      &#123;path: <span class="string">''</span>, component: ProductDescComponent&#125;,</span><br><span class="line">      &#123;path: <span class="string">'seller/:id'</span>, component: SellerINfoComponent&#125;</span><br><span class="line">  ],canActivate: [LoginGuard],canDeactivate: [UnsavedGuard],</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    product: ProductResolve</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br><span class="line">  &#123;path: <span class="string">'**'</span>, component: Code404Component&#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
@@ -102,7 +102,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/04/如何在路由中传递参数/" data-id="cjmun818p000228pqv0f2324a" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/04/如何在路由中传递参数/" data-id="cjmund7fd0003h4pq6oflhbzt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Angular6/">Angular6</a></li></ul>
@@ -112,6 +112,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2018/10/04/Angular-与其他前端框架的对比/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Angular 与其他前端框架的对比
+        
+      </div>
+    </a>
   
   
     <a href="/2018/10/04/我个人博客的第一篇博客，加油/" id="article-nav-older" class="article-nav-link-wrap">
@@ -165,6 +174,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/10/04/Angular-与其他前端框架的对比/">Angular 与其他前端框架的对比</a>
+          </li>
         
           <li>
             <a href="/2018/10/04/如何在路由中传递参数/">路由中传递参数</a>

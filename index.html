@@ -65,6 +65,42 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Angular-与其他前端框架的对比" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/04/Angular-与其他前端框架的对比/" class="article-date">
+  <time datetime="2018-10-04T13:57:41.000Z" itemprop="datePublished">2018-10-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/04/Angular-与其他前端框架的对比/">Angular 与其他前端框架的对比</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/04/Angular-与其他前端框架的对比/" data-id="cjmund7f50001h4pqiw0fbf8x" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-如何在路由中传递参数" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/10/04/如何在路由中传递参数/" class="article-date">
@@ -87,7 +123,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="路由中传递参数"><a href="#路由中传递参数" class="headerlink" title="路由中传递参数"></a>路由中传递参数</h1><ol>
+        <ol>
 <li>修改路由配置中的path属性,使其可以携带参数 <code>path: &#39;product/:id&#39;</code> path的参数后加上 <code>/:id</code> 名为id变量</li>
 </ol>
 <figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> routes: Routes = [</span><br><span class="line">  &#123;path: <span class="string">''</span>, redirectTo: <span class="string">'/home'</span>, pathMatch: <span class="string">'full'</span>&#125;,</span><br><span class="line">  &#123;path: <span class="string">'chat'</span>, component: ChatComponent, outlet: <span class="string">'aux'</span>&#125;,</span><br><span class="line">  &#123;path: <span class="string">'home'</span>, component: HomeComponent&#125;,</span><br><span class="line"></span><br><span class="line">  &#123;path: <span class="string">'product/:id'</span>, component: ProductComponent,</span><br><span class="line">    children: [</span><br><span class="line">      &#123;path: <span class="string">''</span>, component: ProductDescComponent&#125;,</span><br><span class="line">      &#123;path: <span class="string">'seller/:id'</span>, component: SellerINfoComponent&#125;</span><br><span class="line">  ],canActivate: [LoginGuard],canDeactivate: [UnsavedGuard],</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    product: ProductResolve</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br><span class="line">  &#123;path: <span class="string">'**'</span>, component: Code404Component&#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
@@ -102,7 +138,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/04/如何在路由中传递参数/" data-id="cjmun818p000228pqv0f2324a" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/04/如何在路由中传递参数/" data-id="cjmund7fd0003h4pq6oflhbzt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Angular6/">Angular6</a></li></ul>
@@ -140,7 +176,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/04/我个人博客的第一篇博客，加油/" data-id="cjmun818k000128pq5t7w9zal" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/04/我个人博客的第一篇博客，加油/" data-id="cjmund7fb0002h4pqwt2zv7an" class="article-share-link">Share</a>
       
       
     </footer>
@@ -185,7 +221,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/04/hello-world/" data-id="cjmun8189000028pqab71guzf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/04/hello-world/" data-id="cjmund7eu0000h4pq5qsgrtum" class="article-share-link">Share</a>
       
       
     </footer>
@@ -238,6 +274,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/10/04/Angular-与其他前端框架的对比/">Angular 与其他前端框架的对比</a>
+          </li>
         
           <li>
             <a href="/2018/10/04/如何在路由中传递参数/">路由中传递参数</a>
