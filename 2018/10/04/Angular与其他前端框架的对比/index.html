@@ -16,7 +16,7 @@
 <meta property="og:description" content="与React对比 速度:react会先更新虚拟dom,再和实际dom进行对比 angular与之不相上下 FLUX架构:组件化 数据单向更新 服务器端渲染 预渲染 seo优化  与vue对比 个人主导(angular为google开发,号召力资金充足,vue相对来说有些不足) 只关注web(angular还可以开发客户端应用) 服务器端渲染(vue通过第三方库,angular有官方库)  angu">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://liugan96.top/2018/10/04/Angular与其他前端框架的对比/angularApp.png">
-<meta property="og:updated_time" content="2018-10-05T00:30:35.423Z">
+<meta property="og:updated_time" content="2018-10-05T00:45:01.610Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Angular与其他前端框架的对比">
 <meta name="twitter:description" content="与React对比 速度:react会先更新虚拟dom,再和实际dom进行对比 angular与之不相上下 FLUX架构:组件化 数据单向更新 服务器端渲染 预渲染 seo优化  与vue对比 个人主导(angular为google开发,号召力资金充足,vue相对来说有些不足) 只关注web(angular还可以开发客户端应用) 服务器端渲染(vue通过第三方库,angular有官方库)  angu">
@@ -117,13 +117,11 @@
 <li>控制器←→控制器进行数据绑定</li>
 </ul>
 <p>:插值表达式</p>
-<h3 id="启动angular应用"><a href="#启动angular应用" class="headerlink" title="启动angular应用"></a>启动angular应用</h3><blockquote>
-<ol>
-<li>启动时加载了哪个页面?</li>
-<li>启动时加载了哪些脚本?</li>
-<li>这些脚本做了什么事?</li>
+<h3 id="启动angular应用"><a href="#启动angular应用" class="headerlink" title="启动angular应用"></a>启动angular应用</h3><ol>
+<li>启动时加载了哪个页面?<br><code>angular.json中有一项index属性，该属性对应的src目录下的indexhtml指向的是root src目录下的index.html,main属性则指向src下的main.ts文件</code></li>
+<li>启动时加载了哪些脚本?<br><code>main.ts</code></li>
+<li>这些脚本做了什么事?<br><code>负责引导angular应用的启动,引入相关的库及文件,来帮助angular应用程序启动</code></li>
 </ol>
-</blockquote>
 <h3 id="如何引用第三方类库-2-5-开发准备"><a href="#如何引用第三方类库-2-5-开发准备" class="headerlink" title="如何引用第三方类库(2-5)开发准备"></a>如何引用第三方类库(2-5)开发准备</h3><ol>
 <li>npm install 安装到本地库 package.json -&gt; dependencies</li>
 <li>引入到项目中 angular6 后在angular.json中在styles/script中分别引入,之前的版本在angular-cli.json中</li>
@@ -156,7 +154,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://liugan96.top/2018/10/04/Angular与其他前端框架的对比/" data-id="cjmv9xfd70000t4pqotlyd7ul" class="article-share-link">Share</a>
+      <a data-url="http://liugan96.top/2018/10/04/Angular与其他前端框架的对比/" data-id="cjmvagcd00002wcpq13djf7mx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Angular/">Angular</a></li></ul>
