@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <title>Hexo 在layout 为 draft 的情况使用记录 | 温良恭俭让</title>
+  <meta name="description" content="Stay hungry Stay foolish" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <meta name="generator" content="温良恭俭让">
+
+  
+  
+  
+
+  
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body class="home-template">
+<div id="perspective" class="perspective effect-movedown">
+  <div class="container">
+    <!-- wrapper -->
+    <div class="wrapper">
+
+      <header class="site-head"  style="background: #24282b url(/img/img-bg.jpg) 0 -20%" >
+    <div class="vertical">
+        <div class="site-head-content inner">
+             <a class="blog-logo" href="/"><img src="/img/logo.svg" alt="Blog Logo"/></a> 
+            <h1 class="blog-title">温良恭俭让</h1>
+            <h2 class="blog-description">Stay hungry Stay foolish<button id="showMenu">Show Menu</button></h2>
+        </div>
+    </div>
+</header>
+
+      
+
+<main class="content" role="main">
+  <article class="post">
+    <span class="post-meta">
+      <time datetime="2018-10-04T10:24:16.000Z" itemprop="datePublished">
+          2018-10-04
+      </time>
+    
+    
+    | 
+    <a href='/tags/hexo/'>Hexo</a>
+    
+    
+</span>
+    <h1 class="post-title">Hexo 在layout 为 draft 的情况使用记录</h1>
+    <section class="post-content">
+      <p>layout 为 draft 的情况<br>通过以上的学习，我们大概了解了一般情况下生成一篇博客的流程以及各个内容设置对页面效果的影响。那么我们现在学习一下  <code>hexo new draft myDraftBlog</code> 的情况。在没有执行这个命令之前，你可以去看下你的<code>source</code>文件夹，如果你是按照我之前的文章一步步进行的话，你会发现其中只有<code>_post</code>一个文件夹。</p>
+<p>当我们执行上面的命令之后，类似<code>post</code>一样，我们同样会发现在根目录下<code>source/_drafts</code>文件夹中会出现一个<code>myDraftBlog.md</code>的文件。也就是说，<code>_draft</code>文件夹和里面的内容是你执行上述命令之后生成的。同样的，你开始编辑<code>myDraftBlog.md</code>文件，然后保存。</p>
+<p>以此执行<code>hexo g</code> 和 <code>hexo s</code> 命令，打开4000端口之后你会发现，你完全看不到你刚才编辑的<code>myDraftBlog</code>这篇博客。这是为什么呢？因为<code>layout</code> 为 <code>draft</code>的时候，其实这个md文件是草稿状态，也就是说，这篇文章仅仅是作为你的草稿而不是正式稿，所以不会发表在博客主页上。草稿就是需要你不断完善的文章，知道有一天你觉得这篇文章可以正式发表了，那么如何才能将草稿发表成为正式稿件呢？官方文档其实有非常详细的说明：<br><img src="http://oakland.github.io/2016/05/02/hexo-%E5%A6%82%E4%BD%95%E7%94%9F%E6%88%90%E4%B8%80%E7%AF%87%E6%96%B0%E7%9A%84post/1462185994268.png" alt="Drafts"><br>上面的官方文档会告诉你，通过<code>publish</code>命令可以将<code>draft</code>移动到<code>_post</code>文件夹下，形成正式的博客。也就是说，当你认为你的草稿已经完善到可以发表的状态时，执行<code>hexo publish draft myDraftBlog.md</code>，你就会发现，<code>source/_draft</code>文件夹下的<code>myDraftBlog.md</code>文件消失了，而在<code>_post</code>文件夹下你会找到<code>myDraftBlog.md</code>文件。这个时候再按照生成<code>post</code>文件的方式，依次执行<code>hexo g hexo d</code> 就可以将这篇草稿正式转为发表在网上的博客了。</p>
+<p>因此，<code>draft</code>都是草稿，需要和<code>publish</code>命令配合使用。</p>
+<p>当然，根据上面的官网说明，如果我们一定要查看我们的草稿，我们可以使用<code>hexo g --draft</code>， <code>hexo s --draft</code>命令来在本地预览我们的草稿效果。</p>
+
+    </section>
+    <footer class="post-footer">
+      <section class="author">
+    <h4>LumpCode</h4>
+    <p>作为挨踢业的伪设计狮伪技术牛 搬过砖也种过地：爱看、爱听、爱玩儿、爱折腾、机械水电、泥瓦木匠啥都来</p>
+</section>
+      <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-sina-weibo" href="http://v.t.sina.com.cn/share/share.php?title=作为挨踢业的伪设计狮伪技术牛 搬过砖也种过地：爱看、爱听、爱玩儿、爱折腾、机械水电、泥瓦木匠啥都来 ?url=http://liugan96.top/2018/10/04/Hexo 在layout 为 draft 的情况使用记录/" target="_blank">
+        <span class="hidden">weibo</span>
+    </a>
+    <a class="icon-twitter" href="http://twitter.com/share?url=http://liugan96.top/2018/10/04/Hexo 在layout 为 draft 的情况使用记录/"
+       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://liugan96.top/2018/10/04/Hexo 在layout 为 draft 的情况使用记录/"
+       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://liugan96.top/2018/10/04/Hexo 在layout 为 draft 的情况使用记录/"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+
+    </footer>
+  </article>
+  <nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2018/10/04/如何在路由中传递参数/">
+        ← 路由中传递参数
+    </a>
+    
+    <span class="icon-logo">•</span>
+    
+    <a class="older-posts" href="/2018/10/04/hello-world/">
+        Hello World →
+    </a>
+    
+</nav>
+
+  <div id="comment" class="comments-area">
+    <h4 class="title"><a href="#disqus_comments" name="disqus_comments">Comments</a></h4>
+    
+</div>
+
+</main>
+
+
+      
+<footer class="site-footer">
+  
+  <div class="inner">
+     <section class="copyright">All content copyright <a href="/">温良恭俭让</a> &copy; 2014 &bull; All rights reserved.</section>
+     <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://zespia.tw/hexo/">Hexo</a></section>
+  </div>
+</footer>
+
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/menu.js"></script>
+
+
+
+
+
+  </div>
+</div>
+
+<nav  class="outer-nav top horizontal">
+
+          <a class="icon-home"  href="/"><span>Home</span></a>
+
+          <a class="icon-news"  href="/archive"><span>Archive</span></a>
+
+          <a class="icon-image"  href="/images"><span>Images</span></a>
+
+          <a class="icon-wiki"  href="/wiki/2014-10-28-wiki/"><span>Wiki</span></a>
+
+          <a class="icon-Favorites"  href="/favorites"><span>Favorites</span></a>
+
+          <a class="icon-mail"  href="https://github.com/LumpCode"><span>Contact</span></a>
+
+</nav>
+
+</div>
+</body>
+</html>

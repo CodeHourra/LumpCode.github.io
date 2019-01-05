@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <title>Docker入门简易教程 | 温良恭俭让</title>
+  <meta name="description" content="Stay hungry Stay foolish" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <meta name="generator" content="温良恭俭让">
+
+  
+  
+  
+
+  
+</head>
+
+<!--
+<body class="post-template">
+-->
+<body class="home-template">
+<div id="perspective" class="perspective effect-movedown">
+  <div class="container">
+    <!-- wrapper -->
+    <div class="wrapper">
+
+      <header class="site-head"  style="background: #24282b url(/img/img-bg.jpg) 0 -20%" >
+    <div class="vertical">
+        <div class="site-head-content inner">
+             <a class="blog-logo" href="/"><img src="/img/logo.svg" alt="Blog Logo"/></a> 
+            <h1 class="blog-title">温良恭俭让</h1>
+            <h2 class="blog-description">Stay hungry Stay foolish<button id="showMenu">Show Menu</button></h2>
+        </div>
+    </div>
+</header>
+
+      
+
+<main class="content" role="main">
+  <article class="post">
+    <span class="post-meta">
+      <time datetime="2019-01-05T14:14:26.000Z" itemprop="datePublished">
+          2019-01-05
+      </time>
+    
+    
+    | 
+    <a href='/tags/docker/'>Docker</a>
+    
+    
+</span>
+    <h1 class="post-title">Docker入门简易教程</h1>
+    <section class="post-content">
+      <p>[TOC]</p>
+<h2 id="一-Docker简介"><a href="#一-Docker简介" class="headerlink" title="一. Docker简介"></a>一. Docker简介</h2><p>关于<code>Docker</code>的介绍网上已经有了不少,简单来说,<code>Docker</code>是一种容器技术,但是是经过改进的容器技术,其改进的地方在于<code>Docker</code>容器引入了镜像,使的容器的创建和迁移变得方便快捷不少</p>
+<blockquote>
+<p>Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括<code>VMs</code>（虚拟机）、<a href="http://www.whatis.com.cn/word_5275.htm" target="_blank" rel="noopener">bare metal</a>、<code>OpenStack</code> 集群和其他的基础应用平台。</p>
+</blockquote>
+<h4 id="Docker通常用于如下场景："><a href="#Docker通常用于如下场景：" class="headerlink" title="Docker通常用于如下场景："></a>Docker通常用于如下场景：</h4><ul>
+<li>web应用的自动化打包和发布；</li>
+<li>自动化测试和持续集成、发布；</li>
+<li>在服务型环境中部署和调整数据库或其他的后台应用；</li>
+<li>从头编译或者扩展现有的<code>OpenShift</code>或<code>Cloud Foundry</code>平台来搭建自己的<code>PaaS</code>环境。</li>
+</ul>
+<h4 id="Docker明显的特点"><a href="#Docker明显的特点" class="headerlink" title="Docker明显的特点:"></a>Docker明显的特点:</h4><ul>
+<li>轻量,内存占用小,密度高</li>
+<li>快速,启动时间为毫秒级</li>
+<li>隔离,沙盒技术类似于虚拟机</li>
+</ul>
+<h4 id="Docker技术的基础："><a href="#Docker技术的基础：" class="headerlink" title="Docker技术的基础："></a>Docker技术的基础：</h4><ul>
+<li>namespace，容器隔离的基础，保证A容器看不到B容器. 6个名空间：User,Mnt,Network,UTS,IPC,Pid</li>
+<li>cgroups，容器资源统计和隔离。主要用到的cgroups子系统：cpu,blkio,device,freezer,memory</li>
+<li>unionfs，典型：aufs/overlayfs，分层镜像实现的基础</li>
+</ul>
+<h4 id="Docker组件："><a href="#Docker组件：" class="headerlink" title="Docker组件："></a>Docker组件：</h4><ul>
+<li><strong>docker Client</strong>客户端————&gt;向docker服务器进程发起请求，如:创建、停止、销毁容器等操作</li>
+<li><strong>docker Server</strong>服务器进程—–&gt;处理所有docker的请求，管理所有容器</li>
+<li><strong>docker Registry</strong>镜像仓库——&gt;镜像存放的中央仓库，可看作是存放二进制的scm</li>
+</ul>
+<h4 id="Docker的安装"><a href="#Docker的安装" class="headerlink" title="Docker的安装:"></a>Docker的安装:</h4><p>安装在此处就不赘述, 因为其安装比较简单,且支持目前主流操作系统,相关Mac到Windows到Linux发行版的具体安装说明可以参考官方文档: <a href="https://docs.docker.com/installation/" target="_blank" rel="noopener">docker安装</a></p>
+<h2 id="二-准备"><a href="#二-准备" class="headerlink" title="二.准备"></a>二.准备</h2><blockquote>
+<p>Docker系统有两个程序: Docker服务端和Docker客户端.Docker服务端主要是作为管理所有容器的一个服务进程,管理着所有的容器.Docker客户端则相当于Docker服务端的远程控制器,可以用来控制Docker的服务端进程,Docker服务端和客户端通常情况下都运行在一台机器上。</p>
+</blockquote>
+<p>本次的目标是安装Docker成功后检查Docker版本，以便确认Docker服务在运行并且可以通过客户端连接。</p>
+<p>提示： 同其他<code>Linux</code>命令相似可以通过<code>docker</code>命令来查看所有的参数</p>
+<p>通过<code>docker version</code>命令可以查看<code>docker</code>的版本</p>
+<p><img src="//liugan96.top/2019/01/05/docker入门简易教程/dockerVersion.png" alt="dockerVersion"></p>
+<h2 id="三-寻找可用的Docker镜像"><a href="#三-寻找可用的Docker镜像" class="headerlink" title="三.寻找可用的Docker镜像"></a>三.寻找可用的Docker镜像</h2><p>对于新手来讲，使用<code>Docker</code>最简单快捷的方式就是从现有容器镜像入手了，那么该如何去寻找现有的镜像呢，<code>Docker</code>官网专门有一个页面用来存储所有的可用镜像。（<a href="http://index.docker.io/" target="_blank" rel="noopener">网址</a> ）。我们可以通过浏览这个网页来查找我们所需要的镜像或者是通过命令行工具来检索。</p>
+<p>本节的目标是学会通过命令行工具来检索镜像。</p>
+<p>命令行的用法为<code>docker search 镜像名字</code></p>
+<p>示例：</p>
+<p><img src="//liugan96.top/2019/01/05/docker入门简易教程/dockerSearch.png" alt="docker search 镜像"></p>
+<h2 id="四-下载Docker镜像"><a href="#四-下载Docker镜像" class="headerlink" title="四.下载Docker镜像"></a>四.下载Docker镜像</h2><p>在第三小节中我们检索到了名为<code>tutorial</code>的镜像，我们可以使用如下命令来下载该镜像(<code>docker</code>命令和<code>git</code>命令有些类似的地方)</p>
+<p>命令： <code>docker pull learn/tutorial</code></p>
+<p><img src="//liugan96.top/2019/01/05/docker入门简易教程/pullImage1.png" alt="1"></p>
+<p>当执行上述命令时可能会出现镜像已存在的情况，那么此时我们想删除之前的镜像该如何操作呢？如图所示：<img src="//liugan96.top/2019/01/05/docker入门简易教程/pullImage2.png" alt="2"></p>
+<p><img src="//liugan96.top/2019/01/05/docker入门简易教程/pullImage3.png" alt="3"></p>
+<p><img src="//liugan96.top/2019/01/05/docker入门简易教程/pullImage4.png" alt="4"></p>
+<p>总结： </p>
+<p>当想删除镜像时，必须保证该镜像没有容器在使用，否则需要停止并删除该容器，才能进一步删除镜像。</p>
+<ol>
+<li>停止所有的<code>container</code>，这样才能够删除其中的<code>images</code>：<code>docker stop $(docker ps -a -q)</code></li>
+</ol>
+<p>如果想要删除所有<code>container</code>的话再加一个指令：<code>docker rm $(docker ps -a -q)</code></p>
+<ol start="2">
+<li><p>查看当前有些什么images: <code>docker images</code></p>
+</li>
+<li><p>删除images，通过image的id来指定删除谁:<code>docker rmi &lt;image id&gt;</code></p>
+</li>
+</ol>
+<p>想要删除<code>untagged images</code>，也就是那些<code>id</code>为<code>&lt;None&gt;</code>的<code>image</code>的话可以用</p>
+<p><code>docker rmi $(docker images | grep &quot;^&lt;none&gt;&quot; | awk &quot;{print $3}&quot;)</code></p>
+<p>要删除全部image的话<code>docker rmi $(docker images -q)</code></p>
+<h2 id="五-在Docker容器中运行“hello-docker”"><a href="#五-在Docker容器中运行“hello-docker”" class="headerlink" title="五. 在Docker容器中运行“hello docker”"></a>五. 在Docker容器中运行“hello docker”</h2><p>通过<code>docker run</code>命令可以启动某一个镜像并运行一个命令</p>
+<p>在此之前我们可能会问，什么是<code>docker</code>容器呢，和<code>docker</code>又有什么区别呢？</p>
+<blockquote>
+<p><code>docker</code>容器可以理解为在沙盒中运行的进程。这个沙盒包含了该进程运行的所有的必须的资源包括文件系统、系统类库、shell 环境等等。但这个沙盒默认是不会运行任何程序的。你需要在沙盒中运行一个进程来启动某一个容器。这个进程是该容器的唯一进程，所以当该进程结束的时候，容器也会完全的停止。 而<code>docker</code>则是一种容器技术·</p>
+</blockquote>
+<p>现在我们想在刚刚下载的镜像中输出”hello docker”。为了达到这个目的，我们需要在这个容器中运行”echo”命令，输出”hello docker”。 </p>
+<p><img src="//liugan96.top/2019/01/05/docker入门简易教程/hellodocker.png" alt="4"></p>
+<h2 id="六-如何在容器中安装新程序"><a href="#六-如何在容器中安装新程序" class="headerlink" title="六. 如何在容器中安装新程序"></a>六. 如何在容器中安装新程序</h2><p>下一步我们要做的事情是在容器里面安装一个简单的程序(ping)。你可以使用<code>apt-get</code>命令来安装<code>ping</code>程序： <code>apt-get install -y ping</code>。</p>
+<p>备注：<code>apt-get</code> 命令执行完毕之后，容器就会停止，但对容器的改动不会丢失。</p>
+<p>现在我们想在<code>learn/tutorial</code>镜像里面安装<code>ping</code>程序。</p>
+<p>在执行<code>apt-get</code>命令的时候，要带上<code>-y</code>参数。如果不指定-y参数的话，<code>apt-get</code>命令会进入交互模式，需要用户输入命令来进行确认，但在<code>docker</code>环境中是无法响应这种交互的。</p>
+<p><img src="//liugan96.top/2019/01/05/docker入门简易教程/安装新程序.png" alt="4"></p>
+<h2 id="七-保存对容器的修改"><a href="#七-保存对容器的修改" class="headerlink" title="七. 保存对容器的修改"></a>七. 保存对容器的修改</h2><p>当你对某一个容器做了修改之后（通过在容器中运行某一个命令），可以把对容器的修改保存下来，这样下次可以从保存后的最新状态运行该容器。docker中保存状态的过程称之为committing，它保存的新旧状态之间的区别，从而产生一个新的版本。</p>
+<p>首先使用<strong>docker ps -l</strong>命令获得安装完ping命令之后容器的id。然后把这个镜像保存为learn/ping。</p>
+<ol>
+<li><p>运行docker commit，可以查看该命令的参数列表。</p>
+</li>
+<li><p>你需要指定要提交保存容器的ID。(译者按：通过docker ps -l 命令获得)</p>
+</li>
+<li><p>无需拷贝完整的id，通常来讲最开始的三至四个字母即可区分。（备注：非常类似git里面的版本号)</p>
+</li>
+</ol>
+<p><img src="//liugan96.top/2019/01/05/docker入门简易教程/保存修改的容器.png" alt="4"></p>
+<h2 id="八-运行新的镜像"><a href="#八-运行新的镜像" class="headerlink" title="八. 运行新的镜像"></a>八. 运行新的镜像</h2><p><code>ok</code>，到现在为止，你已经建立了一个完整的、自成体系的<code>docker</code>环境，并且安装了<code>ping</code>命令在里面。它可以在任何支持<code>docker</code>环境的系统中运行啦！下面就让我们来体验一下吧！</p>
+<p>在新的镜像中运行ping <a href="http://www.baidu.com（当然也可以www.google.com，" target="_blank" rel="noopener">www.baidu.com（当然也可以www.google.com，</a> but……）命令。</p>
+<p>一定要使用新的镜像名<strong>learn/ping</strong>来运行ping命令。(注：最开始下载的<code>learn/tutorial</code>镜像中是没有ping命令的)</p>
+<p><img src="//liugan96.top/2019/01/05/docker入门简易教程/run.png" alt="4"></p>
+<h2 id="九-检查运行中的镜像"><a href="#九-检查运行中的镜像" class="headerlink" title="九. 检查运行中的镜像"></a>九. 检查运行中的镜像</h2><p>现在你已经运行了一个docker容器，让我们来看下正在运行的容器。</p>
+<p>使用docker ps命令可以查看所有正在运行中的容器列表，使用docker inspect命令我们可以查看更详细的关于某一个容器的信息。</p>
+<p>查找某一个运行中容器的id，然后使用docker inspect命令查看容器的信息。</p>
+<p>可以使用镜像id的前面部分，不需要完整的id。</p>
+<p><img src="//liugan96.top/2019/01/05/docker入门简易教程/dockerps.png" alt="docker ps"></p>
+<p><img src="//liugan96.top/2019/01/05/docker入门简易教程/dockerinspect.png" alt="docker inspect"></p>
+<h2 id="十-发布自己的docker镜像"><a href="#十-发布自己的docker镜像" class="headerlink" title="十. 发布自己的docker镜像"></a>十. 发布自己的docker镜像</h2><p>现在我们已经验证了新镜像可以正常工作，我们可以选择将其发布到官方的索引网站。还记得我们最开始下载的learn/tutorial镜像吧，我们也可以把我们自己编译的镜像发布到索引页面，一方面可以自己重用，另一方面也可以分享给其他人使用。</p>
+<p><code>docker push</code>命令可以将某一个镜像发布到官方网站。 </p>
+<p>注：push之前需要我们登陆<code>docker repository</code>的账号，这里就不再赘述了。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://www.docker.org.cn" target="_blank" rel="noopener">docker中文网</a></p>
+<p><a href="https://blog.csphere.cn/archives/22" target="_blank" rel="noopener">一小时Docker教程</a></p>
+
+    </section>
+    <footer class="post-footer">
+      <section class="author">
+    <h4>LumpCode</h4>
+    <p>作为挨踢业的伪设计狮伪技术牛 搬过砖也种过地：爱看、爱听、爱玩儿、爱折腾、机械水电、泥瓦木匠啥都来</p>
+</section>
+      <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-sina-weibo" href="http://v.t.sina.com.cn/share/share.php?title=作为挨踢业的伪设计狮伪技术牛 搬过砖也种过地：爱看、爱听、爱玩儿、爱折腾、机械水电、泥瓦木匠啥都来 ?url=http://liugan96.top/2019/01/05/docker入门简易教程/" target="_blank">
+        <span class="hidden">weibo</span>
+    </a>
+    <a class="icon-twitter" href="http://twitter.com/share?url=http://liugan96.top/2019/01/05/docker入门简易教程/"
+       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://liugan96.top/2019/01/05/docker入门简易教程/"
+       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://liugan96.top/2019/01/05/docker入门简易教程/"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+
+    </footer>
+  </article>
+  <nav class="pagination" role="pagination">
+    
+    <span class="icon-logo">•</span>
+    
+    <a class="older-posts" href="/2018/10/05/有关Hexo博客图片插件使用报错问题/">
+        有关Hexo博客图片插件使用报错问题 →
+    </a>
+    
+</nav>
+
+  <div id="comment" class="comments-area">
+    <h4 class="title"><a href="#disqus_comments" name="disqus_comments">Comments</a></h4>
+    
+</div>
+
+</main>
+
+
+      
+<footer class="site-footer">
+  
+  <div class="inner">
+     <section class="copyright">All content copyright <a href="/">温良恭俭让</a> &copy; 2014 &bull; All rights reserved.</section>
+     <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://zespia.tw/hexo/">Hexo</a></section>
+  </div>
+</footer>
+
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/menu.js"></script>
+
+
+
+
+
+  </div>
+</div>
+
+<nav  class="outer-nav top horizontal">
+
+          <a class="icon-home"  href="/"><span>Home</span></a>
+
+          <a class="icon-news"  href="/archive"><span>Archive</span></a>
+
+          <a class="icon-image"  href="/images"><span>Images</span></a>
+
+          <a class="icon-wiki"  href="/wiki/2014-10-28-wiki/"><span>Wiki</span></a>
+
+          <a class="icon-Favorites"  href="/favorites"><span>Favorites</span></a>
+
+          <a class="icon-mail"  href="https://github.com/LumpCode"><span>Contact</span></a>
+
+</nav>
+
+</div>
+</body>
+</html>
