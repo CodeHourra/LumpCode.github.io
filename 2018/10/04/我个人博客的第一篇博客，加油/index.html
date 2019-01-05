@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-  <title>我个人博客的第一篇博客，加油... | 温良恭俭让</title>
+  <title>Hexo 在layout 为 draft 的情况使用记录 | 温良恭俭让</title>
   <meta name="description" content="Stay hungry Stay foolish" />
   <meta name="HandheldFriendly" content="True" />
   <meta name="MobileOptimized" content="320" />
@@ -48,10 +48,20 @@
           2018-10-04
       </time>
     
+    
+    | 
+    <a href='/tags/hexo/'>Hexo</a>
+    
+    
 </span>
-    <h1 class="post-title">我个人博客的第一篇博客，加油...</h1>
+    <h1 class="post-title">Hexo 在layout 为 draft 的情况使用记录</h1>
     <section class="post-content">
-      
+      <p>layout 为 draft 的情况<br>通过以上的学习，我们大概了解了一般情况下生成一篇博客的流程以及各个内容设置对页面效果的影响。那么我们现在学习一下  <code>hexo new draft myDraftBlog</code> 的情况。在没有执行这个命令之前，你可以去看下你的<code>source</code>文件夹，如果你是按照我之前的文章一步步进行的话，你会发现其中只有<code>_post</code>一个文件夹。</p>
+<p>当我们执行上面的命令之后，类似<code>post</code>一样，我们同样会发现在根目录下<code>source/_drafts</code>文件夹中会出现一个<code>myDraftBlog.md</code>的文件。也就是说，<code>_draft</code>文件夹和里面的内容是你执行上述命令之后生成的。同样的，你开始编辑<code>myDraftBlog.md</code>文件，然后保存。</p>
+<p>以此执行<code>hexo g</code> 和 <code>hexo s</code> 命令，打开4000端口之后你会发现，你完全看不到你刚才编辑的<code>myDraftBlog</code>这篇博客。这是为什么呢？因为<code>layout</code> 为 <code>draft</code>的时候，其实这个md文件是草稿状态，也就是说，这篇文章仅仅是作为你的草稿而不是正式稿，所以不会发表在博客主页上。草稿就是需要你不断完善的文章，知道有一天你觉得这篇文章可以正式发表了，那么如何才能将草稿发表成为正式稿件呢？官方文档其实有非常详细的说明：<br><img src="http://oakland.github.io/2016/05/02/hexo-%E5%A6%82%E4%BD%95%E7%94%9F%E6%88%90%E4%B8%80%E7%AF%87%E6%96%B0%E7%9A%84post/1462185994268.png" alt="Drafts"><br>上面的官方文档会告诉你，通过<code>publish</code>命令可以将<code>draft</code>移动到<code>_post</code>文件夹下，形成正式的博客。也就是说，当你认为你的草稿已经完善到可以发表的状态时，执行<code>hexo publish draft</code> <code>myDraftBlog.md</code>，你就会发现，<code>source/_draft</code>文件夹下的<code>myDraftBlog.md</code>文件消失了，而在<code>_post</code>文件夹下你会找到<code>myDraftBlog.md</code>文件。这个时候再按照生成<code>post</code>文件的方式，依次执行<code>hexo g hexo d</code> 就可以将这篇草稿正式转为发表在网上的博客了。</p>
+<p>因此，<code>draft</code>都是草稿，需要和<code>publish</code>命令配合使用。</p>
+<p>当然，根据上面的官网说明，如果我们一定要查看我们的草稿，我们可以使用<code>hexo g --draft</code>， <code>hexo s --draft</code>命令来在本地预览我们的草稿效果。</p>
+
     </section>
     <footer class="post-footer">
       <section class="author">
