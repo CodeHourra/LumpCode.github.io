@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>温良恭俭让</title>
+  
+  <subtitle>Stay hungry Stay foolish</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://liugan96.top/"/>
+  <updated>2019-01-20T01:59:53.066Z</updated>
+  <id>http://liugan96.top/</id>
+  
+  <author>
+    <name>LumpCode</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>springboot+maven+mybatis整合时遇到一些需要注意的问题</title>
+    <link href="http://liugan96.top/2019/01/13/springboot-maven-mybatis%E6%95%B4%E5%90%88%E6%97%B6%E9%81%87%E5%88%B0%E4%B8%80%E4%BA%9B%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://liugan96.top/2019/01/13/springboot-maven-mybatis整合时遇到一些需要注意的问题/</id>
+    <published>2019-01-13T03:28:29.000Z</published>
+    <updated>2019-01-20T01:59:53.066Z</updated>
+    
+    <content type="html"><![CDATA[<p>昨天在整合<code>springboot+maven+mybatis</code>遇到了一些问题，也花了一些时间去解决，其主要问题都是些配置的问题，由于版本的变动，相应的一些包的版本和配置文件的写法也会有些许不同，如果依旧按照之前的写法，可能编译通过，但是运行时就会报错，下面就简要记录一下遇到的一些坑。</p><ol><li><code>mybatis-generator-core</code>包无法下载<img src="//liugan96.top/2019/01/13/springboot-maven-mybatis整合时遇到一些需要注意的问题/mybatis插件.png" alt="mybatis插件"></li></ol><p>有的同学可能在此处会遇到该依赖无法下载下来，此时只需要将该依赖移到<code>&lt;build&gt;&lt;/build&gt;</code>标签外的<code>&lt;dependencies&gt;&lt;/dependencies&gt;</code>标签内就可以把<code>jar</code>包下载下来，再移回原处即可。只要有<code>jar</code>包就不会报错了，出现这个问题的原因尚不明确，笔者推测可能是maven的依赖传递存在的一些问题。</p><ol start="2"><li>如图，找不到<code>xml</code>中的<code>sql</code>语句<img src="//liugan96.top/2019/01/13/springboot-maven-mybatis整合时遇到一些需要注意的问题/无效的statement.png" alt="无效的statement"></li></ol><p>该问题不影响<code>springboot</code>服务的正常启动，但是在访问该方法去执行<code>mybatis</code>生成的查询方法时则会出现，网上关于此类似的问题解决的方案主要分为三种：</p><p>​    <strong>第一种：语法错误</strong></p><p>Java DAO层接口</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void delete(@Param(&quot;id&quot;)String id);</span><br></pre></td></tr></table></figure><p>Java 对应的mapper.xml文件</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;</span><br><span class="line">&lt;mapper namespace=&quot;xxx.xxx.xxx.Mapper&quot;&gt;</span><br><span class="line">    &lt;!-- 删除数据 --&gt;</span><br><span class="line">    &lt;delete id=&quot;delete&quot; parameterType=&quot;java.lang.String&quot;&gt;</span><br><span class="line">        DELETE FROM xxx WHERE id=#&#123;id&#125;</span><br><span class="line">    &lt;/delete&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure><p>检查：1. 接口中方法名（delete）与xml文件中 id=”delete”是否一致</p><p>　　　2. xml文件中的 namespace=”xxx.xxx.xxx.Mapper” 中的路径是否与接口文件路径一致</p><p>　　　3.parameterType类型 与 resultType类型是否准确；resultMap与resultType是不一样的。</p><p>​    <strong>第二种：编译错误</strong></p><p>　　定位到项目路径下：<code>target\classes\</code> 中报错路径下，寻找对应的<code>xml</code>文件是否存在。</p><p>（1）若不存在对应的<code>xml</code>文件，则需要在<code>pom.xml</code>中加入以下代码：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;build&gt;</span><br><span class="line">    &lt;resources&gt;</span><br><span class="line">         &lt;resource&gt;</span><br><span class="line">             &lt;directory&gt;src/main/java&lt;/directory&gt;</span><br><span class="line">             &lt;excludes&gt;</span><br><span class="line">                 &lt;exclude&gt;**/*.java&lt;/exclude&gt;</span><br><span class="line">             &lt;/excludes&gt;</span><br><span class="line">         &lt;/resource&gt;</span><br><span class="line">         &lt;resource&gt;</span><br><span class="line">             &lt;directory&gt;src/main/resources&lt;/directory&gt;</span><br><span class="line">             &lt;includes&gt;</span><br><span class="line">                 &lt;include&gt;**/*.*&lt;/include&gt;</span><br><span class="line">             &lt;/includes&gt;</span><br><span class="line">        &lt;/resource&gt;</span><br><span class="line">    &lt;/resources&gt;</span><br><span class="line">&lt;/build&gt;</span><br></pre></td></tr></table></figure><p>　　删除classes文件夹中文件，重新编译，出现了对应的<code>xml</code>文件即可。</p><p><img src="//liugan96.top/2019/01/13/springboot-maven-mybatis整合时遇到一些需要注意的问题/生成的mapperd-xml.png" alt=""></p><p>（2）若存在xml文件，则打开xml文件，检查其中报错部分是否与源文件一致，不一致，则</p><p>　　先清除classes文件夹中文件，执行命令：mvn clean 清理内容，重新编译后即可。</p><p>​    <strong>第三种：配置错误</strong></p><p>　　在配置文件中指定扫描包时，配置路径有问题。例如：spring配置文件中<code>”basePackage”</code>属性包名的指定一定要具体到接口所在包，而不要写父级甚至更高级别的包 ，否则可能出现问题；<code>cn.dao</code>与<code>cn.*</code>也可能导致错误；注解扫描时，可能没有扫描到包等。</p><ol start="3"><li><p><code>mysql</code>版本及驱动包问题</p><p>我安装的<code>MySQL</code>版本为<code>8.0.13</code>，对应的<code>mysql-connector-java</code>包的版本应该为<code>8.0.11</code>,<code>MySQL5.7</code>之前的版本可以使用<code>5.1.41</code>，同时对应的<code>MySQL8</code>以上的数据库连接<code>url及driver</code>和之前的有所区别，当运行时出现有关数据连接方面的错误可以先检查一下数据库连接<code>url</code>，在<code>MySQL8</code>中<code>url</code>要指定<code>ssl,编码格式，时区</code>等。先将<code>MySQL8的url及driver写法展示如下</code>：</p><p><code>application.yml</code>中：</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  datasource:</span></span><br><span class="line"><span class="attr">    data:</span> <span class="string">miaosha</span></span><br><span class="line"><span class="attr">    url:</span> <span class="attr">jdbc:mysql://localhost:3306/miaosha?serverTimezone=UTC&amp;acharacterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=GMT&amp;rewriteBatchedStatements=true</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    password:</span> <span class="string">******</span></span><br><span class="line">    <span class="comment">#使用druid数据源</span></span><br><span class="line"><span class="attr">    type:</span> <span class="string">com.alibaba.druid.pool.DruidDataSource</span></span><br><span class="line">    <span class="comment"># mysql8以上推荐的驱动包</span></span><br><span class="line"><span class="attr">    driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br></pre></td></tr></table></figure></li></ol><p>   <code>mybatis-generator.xml</code>中：</p>   <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context</span> <span class="attr">id</span>=<span class="string">"DB2Tables"</span> <span class="attr">targetRuntime</span>=<span class="string">"MyBatis3"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--数据库连接地址账号密码--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">jdbcConnection</span> <span class="attr">driverClass</span>=<span class="string">"com.mysql.cj.jdbc.Driver"</span></span></span><br><span class="line"><span class="tag">                        <span class="attr">connectionURL</span>=<span class="string">"jdbc:mysql://localhost:3306/miaosha?serverTimezone=UTC&amp;amp;characterEncoding=utf-8&amp;amp;useSSL=false&amp;amp;serverTimezone=GMT&amp;amp;rewriteBatchedStatements=true"</span></span></span><br><span class="line"><span class="tag">                        <span class="attr">userId</span>=<span class="string">"root"</span></span></span><br><span class="line"><span class="tag">                        <span class="attr">password</span>=<span class="string">"******"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">jdbcConnection</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context</span>&gt;</span></span><br></pre></td></tr></table></figure><p>   注：<code>&amp;amp;</code>为<code>&amp;</code>转义，在<code>Idea</code>中编写<code>XML</code>文件直接使用<code>&amp;</code>貌似会报错</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;昨天在整合&lt;code&gt;springboot+maven+mybatis&lt;/code&gt;遇到了一些问题，也花了一些时间去解决，其主要问题都是些配置的问题，由于版本的变动，相应的一些包的版本和配置文件的写法也会有些许不同，如果依旧按照之前的写法，可能编译通过，但是运行时就会报错，
+      
+    
+    </summary>
+    
+    
+      <category term="Springboot" scheme="http://liugan96.top/tags/springboot/"/>
+    
+      <category term="Maven" scheme="http://liugan96.top/tags/maven/"/>
+    
+      <category term="Mybatis" scheme="http://liugan96.top/tags/mybatis/"/>
+    
+      <category term="MySQL" scheme="http://liugan96.top/tags/mysql/"/>
+    
+      <category term="Java" scheme="http://liugan96.top/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://liugan96.top/2019/01/12/hello-world/"/>
+    <id>http://liugan96.top/2019/01/12/hello-world/</id>
+    <published>2019-01-11T16:01:34.435Z</published>
+    <updated>2019-01-05T07:36:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Docker入门简易教程</title>
+    <link href="http://liugan96.top/2019/01/05/docker%E5%85%A5%E9%97%A8%E7%AE%80%E6%98%93%E6%95%99%E7%A8%8B/"/>
+    <id>http://liugan96.top/2019/01/05/docker入门简易教程/</id>
+    <published>2019-01-05T14:14:26.000Z</published>
+    <updated>2019-01-05T14:15:02.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>[TOC]</p><h2 id="一-Docker简介"><a href="#一-Docker简介" class="headerlink" title="一. Docker简介"></a>一. Docker简介</h2><p>关于<code>Docker</code>的介绍网上已经有了不少,简单来说,<code>Docker</code>是一种容器技术,但是是经过改进的容器技术,其改进的地方在于<code>Docker</code>容器引入了镜像,使的容器的创建和迁移变得方便快捷不少</p><blockquote><p>Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括<code>VMs</code>（虚拟机）、<a href="http://www.whatis.com.cn/word_5275.htm" target="_blank" rel="noopener">bare metal</a>、<code>OpenStack</code> 集群和其他的基础应用平台。</p></blockquote><h4 id="Docker通常用于如下场景："><a href="#Docker通常用于如下场景：" class="headerlink" title="Docker通常用于如下场景："></a>Docker通常用于如下场景：</h4><ul><li>web应用的自动化打包和发布；</li><li>自动化测试和持续集成、发布；</li><li>在服务型环境中部署和调整数据库或其他的后台应用；</li><li>从头编译或者扩展现有的<code>OpenShift</code>或<code>Cloud Foundry</code>平台来搭建自己的<code>PaaS</code>环境。</li></ul><h4 id="Docker明显的特点"><a href="#Docker明显的特点" class="headerlink" title="Docker明显的特点:"></a>Docker明显的特点:</h4><ul><li>轻量,内存占用小,密度高</li><li>快速,启动时间为毫秒级</li><li>隔离,沙盒技术类似于虚拟机</li></ul><h4 id="Docker技术的基础："><a href="#Docker技术的基础：" class="headerlink" title="Docker技术的基础："></a>Docker技术的基础：</h4><ul><li>namespace，容器隔离的基础，保证A容器看不到B容器. 6个名空间：User,Mnt,Network,UTS,IPC,Pid</li><li>cgroups，容器资源统计和隔离。主要用到的cgroups子系统：cpu,blkio,device,freezer,memory</li><li>unionfs，典型：aufs/overlayfs，分层镜像实现的基础</li></ul><h4 id="Docker组件："><a href="#Docker组件：" class="headerlink" title="Docker组件："></a>Docker组件：</h4><ul><li><strong>docker Client</strong>客户端————&gt;向docker服务器进程发起请求，如:创建、停止、销毁容器等操作</li><li><strong>docker Server</strong>服务器进程—–&gt;处理所有docker的请求，管理所有容器</li><li><strong>docker Registry</strong>镜像仓库——&gt;镜像存放的中央仓库，可看作是存放二进制的scm</li></ul><h4 id="Docker的安装"><a href="#Docker的安装" class="headerlink" title="Docker的安装:"></a>Docker的安装:</h4><p>安装在此处就不赘述, 因为其安装比较简单,且支持目前主流操作系统,相关Mac到Windows到Linux发行版的具体安装说明可以参考官方文档: <a href="https://docs.docker.com/installation/" target="_blank" rel="noopener">docker安装</a></p><h2 id="二-准备"><a href="#二-准备" class="headerlink" title="二.准备"></a>二.准备</h2><blockquote><p>Docker系统有两个程序: Docker服务端和Docker客户端.Docker服务端主要是作为管理所有容器的一个服务进程,管理着所有的容器.Docker客户端则相当于Docker服务端的远程控制器,可以用来控制Docker的服务端进程,Docker服务端和客户端通常情况下都运行在一台机器上。</p></blockquote><p>本次的目标是安装Docker成功后检查Docker版本，以便确认Docker服务在运行并且可以通过客户端连接。</p><p>提示： 同其他<code>Linux</code>命令相似可以通过<code>docker</code>命令来查看所有的参数</p><p>通过<code>docker version</code>命令可以查看<code>docker</code>的版本</p><p><img src="//liugan96.top/2019/01/05/docker入门简易教程/dockerVersion.png" alt="dockerVersion"></p><h2 id="三-寻找可用的Docker镜像"><a href="#三-寻找可用的Docker镜像" class="headerlink" title="三.寻找可用的Docker镜像"></a>三.寻找可用的Docker镜像</h2><p>对于新手来讲，使用<code>Docker</code>最简单快捷的方式就是从现有容器镜像入手了，那么该如何去寻找现有的镜像呢，<code>Docker</code>官网专门有一个页面用来存储所有的可用镜像。（<a href="http://index.docker.io/" target="_blank" rel="noopener">网址</a> ）。我们可以通过浏览这个网页来查找我们所需要的镜像或者是通过命令行工具来检索。</p><p>本节的目标是学会通过命令行工具来检索镜像。</p><p>命令行的用法为<code>docker search 镜像名字</code></p><p>示例：</p><p><img src="//liugan96.top/2019/01/05/docker入门简易教程/dockerSearch.png" alt="docker search 镜像"></p><h2 id="四-下载Docker镜像"><a href="#四-下载Docker镜像" class="headerlink" title="四.下载Docker镜像"></a>四.下载Docker镜像</h2><p>在第三小节中我们检索到了名为<code>tutorial</code>的镜像，我们可以使用如下命令来下载该镜像(<code>docker</code>命令和<code>git</code>命令有些类似的地方)</p><p>命令： <code>docker pull learn/tutorial</code></p><p><img src="//liugan96.top/2019/01/05/docker入门简易教程/pullImage1.png" alt="1"></p><p>当执行上述命令时可能会出现镜像已存在的情况，那么此时我们想删除之前的镜像该如何操作呢？如图所示：<img src="//liugan96.top/2019/01/05/docker入门简易教程/pullImage2.png" alt="2"></p><p><img src="//liugan96.top/2019/01/05/docker入门简易教程/pullImage3.png" alt="3"></p><p><img src="//liugan96.top/2019/01/05/docker入门简易教程/pullImage4.png" alt="4"></p><p>总结： </p><p>当想删除镜像时，必须保证该镜像没有容器在使用，否则需要停止并删除该容器，才能进一步删除镜像。</p><ol><li>停止所有的<code>container</code>，这样才能够删除其中的<code>images</code>：<code>docker stop $(docker ps -a -q)</code></li></ol><p>如果想要删除所有<code>container</code>的话再加一个指令：<code>docker rm $(docker ps -a -q)</code></p><ol start="2"><li><p>查看当前有些什么images: <code>docker images</code></p></li><li><p>删除images，通过image的id来指定删除谁:<code>docker rmi &lt;image id&gt;</code></p></li></ol><p>想要删除<code>untagged images</code>，也就是那些<code>id</code>为<code>&lt;None&gt;</code>的<code>image</code>的话可以用</p><p><code>docker rmi $(docker images | grep &quot;^&lt;none&gt;&quot; | awk &quot;{print $3}&quot;)</code></p><p>要删除全部image的话<code>docker rmi $(docker images -q)</code></p><h2 id="五-在Docker容器中运行“hello-docker”"><a href="#五-在Docker容器中运行“hello-docker”" class="headerlink" title="五. 在Docker容器中运行“hello docker”"></a>五. 在Docker容器中运行“hello docker”</h2><p>通过<code>docker run</code>命令可以启动某一个镜像并运行一个命令</p><p>在此之前我们可能会问，什么是<code>docker</code>容器呢，和<code>docker</code>又有什么区别呢？</p><blockquote><p><code>docker</code>容器可以理解为在沙盒中运行的进程。这个沙盒包含了该进程运行的所有的必须的资源包括文件系统、系统类库、shell 环境等等。但这个沙盒默认是不会运行任何程序的。你需要在沙盒中运行一个进程来启动某一个容器。这个进程是该容器的唯一进程，所以当该进程结束的时候，容器也会完全的停止。 而<code>docker</code>则是一种容器技术·</p></blockquote><p>现在我们想在刚刚下载的镜像中输出”hello docker”。为了达到这个目的，我们需要在这个容器中运行”echo”命令，输出”hello docker”。 </p><p><img src="//liugan96.top/2019/01/05/docker入门简易教程/hellodocker.png" alt="4"></p><h2 id="六-如何在容器中安装新程序"><a href="#六-如何在容器中安装新程序" class="headerlink" title="六. 如何在容器中安装新程序"></a>六. 如何在容器中安装新程序</h2><p>下一步我们要做的事情是在容器里面安装一个简单的程序(ping)。你可以使用<code>apt-get</code>命令来安装<code>ping</code>程序： <code>apt-get install -y ping</code>。</p><p>备注：<code>apt-get</code> 命令执行完毕之后，容器就会停止，但对容器的改动不会丢失。</p><p>现在我们想在<code>learn/tutorial</code>镜像里面安装<code>ping</code>程序。</p><p>在执行<code>apt-get</code>命令的时候，要带上<code>-y</code>参数。如果不指定-y参数的话，<code>apt-get</code>命令会进入交互模式，需要用户输入命令来进行确认，但在<code>docker</code>环境中是无法响应这种交互的。</p><p><img src="//liugan96.top/2019/01/05/docker入门简易教程/安装新程序.png" alt="4"></p><h2 id="七-保存对容器的修改"><a href="#七-保存对容器的修改" class="headerlink" title="七. 保存对容器的修改"></a>七. 保存对容器的修改</h2><p>当你对某一个容器做了修改之后（通过在容器中运行某一个命令），可以把对容器的修改保存下来，这样下次可以从保存后的最新状态运行该容器。docker中保存状态的过程称之为committing，它保存的新旧状态之间的区别，从而产生一个新的版本。</p><p>首先使用<strong>docker ps -l</strong>命令获得安装完ping命令之后容器的id。然后把这个镜像保存为learn/ping。</p><ol><li><p>运行docker commit，可以查看该命令的参数列表。</p></li><li><p>你需要指定要提交保存容器的ID。(译者按：通过docker ps -l 命令获得)</p></li><li><p>无需拷贝完整的id，通常来讲最开始的三至四个字母即可区分。（备注：非常类似git里面的版本号)</p></li></ol><p><img src="//liugan96.top/2019/01/05/docker入门简易教程/保存修改的容器.png" alt="4"></p><h2 id="八-运行新的镜像"><a href="#八-运行新的镜像" class="headerlink" title="八. 运行新的镜像"></a>八. 运行新的镜像</h2><p><code>ok</code>，到现在为止，你已经建立了一个完整的、自成体系的<code>docker</code>环境，并且安装了<code>ping</code>命令在里面。它可以在任何支持<code>docker</code>环境的系统中运行啦！下面就让我们来体验一下吧！</p><p>在新的镜像中运行ping <a href="http://www.baidu.com（当然也可以www.google.com，" target="_blank" rel="noopener">www.baidu.com（当然也可以www.google.com，</a> but……）命令。</p><p>一定要使用新的镜像名<strong>learn/ping</strong>来运行ping命令。(注：最开始下载的<code>learn/tutorial</code>镜像中是没有ping命令的)</p><p><img src="//liugan96.top/2019/01/05/docker入门简易教程/run.png" alt="4"></p><h2 id="九-检查运行中的镜像"><a href="#九-检查运行中的镜像" class="headerlink" title="九. 检查运行中的镜像"></a>九. 检查运行中的镜像</h2><p>现在你已经运行了一个docker容器，让我们来看下正在运行的容器。</p><p>使用docker ps命令可以查看所有正在运行中的容器列表，使用docker inspect命令我们可以查看更详细的关于某一个容器的信息。</p><p>查找某一个运行中容器的id，然后使用docker inspect命令查看容器的信息。</p><p>可以使用镜像id的前面部分，不需要完整的id。</p><p><img src="//liugan96.top/2019/01/05/docker入门简易教程/dockerps.png" alt="docker ps"></p><p><img src="//liugan96.top/2019/01/05/docker入门简易教程/dockerinspect.png" alt="docker inspect"></p><h2 id="十-发布自己的docker镜像"><a href="#十-发布自己的docker镜像" class="headerlink" title="十. 发布自己的docker镜像"></a>十. 发布自己的docker镜像</h2><p>现在我们已经验证了新镜像可以正常工作，我们可以选择将其发布到官方的索引网站。还记得我们最开始下载的learn/tutorial镜像吧，我们也可以把我们自己编译的镜像发布到索引页面，一方面可以自己重用，另一方面也可以分享给其他人使用。</p><p><code>docker push</code>命令可以将某一个镜像发布到官方网站。 </p><p>注：push之前需要我们登陆<code>docker repository</code>的账号，这里就不再赘述了。</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://www.docker.org.cn" target="_blank" rel="noopener">docker中文网</a></p><p><a href="https://blog.csphere.cn/archives/22" target="_blank" rel="noopener">一小时Docker教程</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h2 id=&quot;一-Docker简介&quot;&gt;&lt;a href=&quot;#一-Docker简介&quot; class=&quot;headerlink&quot; title=&quot;一. Docker简介&quot;&gt;&lt;/a&gt;一. Docker简介&lt;/h2&gt;&lt;p&gt;关于&lt;code&gt;Docker&lt;/code&gt;的介
+      
+    
+    </summary>
+    
+    
+      <category term="Docker" scheme="http://liugan96.top/tags/docker/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>有关Hexo博客图片插件使用报错问题</title>
+    <link href="http://liugan96.top/2018/10/05/%E6%9C%89%E5%85%B3Hexo%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/"/>
+    <id>http://liugan96.top/2018/10/05/有关Hexo博客图片插件使用报错问题/</id>
+    <published>2018-10-05T01:09:03.000Z</published>
+    <updated>2018-10-05T01:24:46.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>在我们搭建好Hexo博客平台后,我们通常都会尝试写一篇博客去测试是否搭建成功,但是在博客里通常带有一些图片,在没有经过配置的情况下,图片是不会被正常显示的,下面就来简单介绍一下如何来配置让图片能够正常显示.</p><p><code>hexo</code>默认无法自动处理文章插入本地图片，需要通过扩展插件支持。</p><ol><li>首先找到配置<code>_config.yml</code>文件中的<code>post_asset_folder:false</code>这个选项设置为<code>true</code>,启动 Asset 文件夹.当您设置<code>post_asset_folder</code>为<code>true</code>参数后，在建立文件时，Hexo 会自动建立一个与文章同名的文件夹，您可以把与该文章相关的所有资源都放到那个文件夹，如此一来，您便可以更方便的使用资源。</li><li>在hexo的目录下执行<code>npm install https://github.com/CodeFalling/hexo-asset-image --save</code>（需要等待一段时间,安装插件）</li><li>完成安装后,运行<code>hexo n &quot;xxxx&quot;</code>来生成md博文时会发现_posts目录下面会多出一个和文章名字一样的文件夹。图片就可以放在文件夹下面。结构如下：</li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">本地图片测试</span><br><span class="line">├── test1.jpg</span><br><span class="line">├── test2.jpg</span><br><span class="line">└── test3.jpg</span><br><span class="line">本地图片测试.md</span><br></pre></td></tr></table></figure><p>这样的目录结构（目录名和文章名一致），只要使用标准的md语法来引入<code>![logo](本地图片测试/test1.jpg)</code> 就可以插入图片。其中<code>[]</code>里面不写文字则没有图片标题。<br>生成的结构为</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public/2016/3/9/本地图片测试</span><br><span class="line">├── test1.jpg</span><br><span class="line">├── index.html</span><br><span class="line">├── test2.jpg</span><br><span class="line">└── test3.jpg</span><br></pre></td></tr></table></figure><p>同时，生成的 html 是</p><p><code>&lt;img src=&quot;/2016/3/9/本地图片测试/test1.jpg&quot; alt=&quot;test1&quot;&gt;</code></p><p>而不是愚蠢的</p><p><code>&lt;img src=&quot;本地图片测试/test1.jpg&quot; alt=&quot;test1&quot;&gt;</code></p><p>Issue:</p><p>由于<code>hexo3</code>版本后对很多插件支持有问题，<code>hexo-asset-image</code>插件在处理<code>data.permalink</code>链接时出现路径错误，把年月去掉了，导致最后生成的路径为<code>%d/xxx/xxx</code>需要对其做兼容处理。通过判断当前版本是否等于3的版本做不同的路径分割。</p><p>在代码中加入：</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> version = <span class="built_in">String</span>(hexo.version).split(<span class="string">'.'</span>);</span><br><span class="line">修改date.permalink处理：</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> link = data.permalink;  </span><br><span class="line"><span class="keyword">if</span>(version.length &gt; <span class="number">0</span> &amp;&amp; <span class="built_in">Number</span>(version[<span class="number">0</span>]) == <span class="number">3</span>)</span><br><span class="line">    <span class="keyword">var</span> beginPos = getPosition(link, <span class="string">'/'</span>, <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="keyword">var</span> beginPos = getPosition(link, <span class="string">'/'</span>, <span class="number">3</span>) + <span class="number">1</span>;</span><br><span class="line">重新生成静态文件即可正确显示。</span><br></pre></td></tr></table></figure><p>可直接安装已经修改过得插件<code>npm install https://github.com/7ym0n/hexo-asset-image --save</code></p><p>参考链接：<a href="https://www.jianshu.com/p/3db6a61d3782" target="_blank" rel="noopener">https://www.jianshu.com/p/3db6a61d3782</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在我们搭建好Hexo博客平台后,我们通常都会尝试写一篇博客去测试是否搭建成功,但是在博客里通常带有一些图片,在没有经过配置的情况下,图片是不会被正常显示的,下面就来简单介绍一下如何来配置让图片能够正常显示.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;hexo&lt;/code&gt;默认无法自动处理文
+      
+    
+    </summary>
+    
+    
+      <category term="小问题" scheme="http://liugan96.top/tags/%E5%B0%8F%E9%97%AE%E9%A2%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Angular与其他前端框架的对比</title>
+    <link href="http://liugan96.top/2018/10/04/Angular%E4%B8%8E%E5%85%B6%E4%BB%96%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6%E7%9A%84%E5%AF%B9%E6%AF%94/"/>
+    <id>http://liugan96.top/2018/10/04/Angular与其他前端框架的对比/</id>
+    <published>2018-10-04T14:31:15.000Z</published>
+    <updated>2018-10-05T00:48:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="与React对比"><a href="#与React对比" class="headerlink" title="与React对比"></a>与React对比</h2><ul><li>速度:react会先更新虚拟dom,再和实际dom进行对比 angular与之不相上下</li><li>FLUX架构:组件化 数据单向更新</li><li>服务器端渲染 预渲染 seo优化</li></ul><h2 id="与vue对比"><a href="#与vue对比" class="headerlink" title="与vue对比"></a>与vue对比</h2><ul><li>个人主导(angular为google开发,号召力资金充足,vue相对来说有些不足)</li><li>只关注web(angular还可以开发客户端应用)</li><li>服务器端渲染(vue通过第三方库,angular有官方库)</li></ul><h2 id="angular程序架构"><a href="#angular程序架构" class="headerlink" title="angular程序架构"></a>angular程序架构</h2><p><img src="//liugan96.top/2018/10/04/Angular与其他前端框架的对比/angularApp.png" alt="angular程序架构"></p><p><strong>组件</strong>:是Angular应用的基本构建块,你可以把一个组件理解为一段带有业务逻辑和数据的html</p><p><strong>服务</strong>:用来封装可重用的业务逻辑</p><p><strong>指令</strong>:允许你向html中添加自定义行为</p><p><strong>模块</strong>:用来将应用中不同的部分组织成一个Angular框架可以理解的单元</p><p><strong>组件、服务、模块是为了完成某些功能的,模块是为了打包、分发这些功能的.</strong></p><h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><p><strong>组件(Component)必备三要素</strong>:</p><ul><li>装饰器( @Component() ):</li><li>模版(Template)</li><li>控制器(Controller)</li><li>控制器←→控制器进行数据绑定</li></ul><p>:插值表达式</p><h3 id="启动angular应用"><a href="#启动angular应用" class="headerlink" title="启动angular应用"></a>启动angular应用</h3><ol><li>启动时加载了哪个页面?<br><code>angular.json中有一项index属性，该属性对应的src目录下的indexhtml指向的是root src目录下的index.html,main属性则指向src下的main.ts文件</code></li><li>启动时加载了哪些脚本?<br><code>main.ts</code></li><li>这些脚本做了什么事?<br><code>负责引导angular应用的启动,引入相关的库及文件,来帮助angular应用程序启动</code></li></ol><h3 id="如何引用第三方类库-2-5-开发准备"><a href="#如何引用第三方类库-2-5-开发准备" class="headerlink" title="如何引用第三方类库(2-5)开发准备"></a>如何引用第三方类库(2-5)开发准备</h3><ol><li><code>npm install</code> 安装到本地库 <code>package.json -&gt; dependencies</code></li><li>引入到项目中 <code>angular6</code> 后在<code>angular.json</code>中在<code>styles/script</code>中分别引入,之前的版本在<code>angular-cli.json</code>中</li><li><code>npm install @types/jquery -D</code> 安装<code>jquery</code>的<code>ts</code>类型描述文件,<code>npm i @types/bootstrap -D</code>安装<code>bootstrap</code>的<code>ts</code>类型描述文件</li></ol><h3 id="组件开发"><a href="#组件开发" class="headerlink" title="组件开发"></a>组件开发</h3><ol><li>App组件</li><li>导航栏组件</li><li>页脚组件</li><li>搜索表单组件</li><li>轮播图组件</li><li>商品展示组件</li><li>星级评价组件 *ngFor:指令</li></ol><p>命令自动生成组件 <code>ng g component xxx</code> 在当前项目下生成组件</p><h3 id="商品展示组件"><a href="#商品展示组件" class="headerlink" title="商品展示组件"></a>商品展示组件</h3><p>重点:<strong>angular始终是根据后台数据的变化来生成页面的,而不是去操纵dom元素</strong></p><p>bootstrap元素居中:<br>在bootstrap中实现元素居中的方法主要有这几种：</p><ol><li>加类.text-center（子元素居中）</li><li>加类.center-block（自身居中）</li><li>利用bootstrap中列偏移的概念。例如：col-md-offset-2(外边距向右偏移两列)</li></ol><h3 id="数据绑定"><a href="#数据绑定" class="headerlink" title="数据绑定"></a>数据绑定</h3><ol><li>通过插值表达式  直接将对象的属性展示出来</li><li>属性绑定:<code>&lt;img [src]=&quot;imgUrl&quot; alt=&quot;商品图片&quot;&gt;</code> 通过[]将标签属性绑定控制器的属性</li><li>样式绑定: <code>[class.glyphicon-star-empty]=&quot;star&quot;</code>  前面的class表示的是我后面要绑定的是一个class样式这个样式是由star的值决定的,star为true时会多出这么个样式,反之则不会</li><li>属性传递:</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;与React对比&quot;&gt;&lt;a href=&quot;#与React对比&quot; class=&quot;headerlink&quot; title=&quot;与React对比&quot;&gt;&lt;/a&gt;与React对比&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;速度:react会先更新虚拟dom,再和实际dom进行对比 angular与之不
+      
+    
+    </summary>
+    
+    
+      <category term="Angular" scheme="http://liugan96.top/tags/angular/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>路由中传递参数</title>
+    <link href="http://liugan96.top/2018/10/04/%E5%A6%82%E4%BD%95%E5%9C%A8%E8%B7%AF%E7%94%B1%E4%B8%AD%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/"/>
+    <id>http://liugan96.top/2018/10/04/如何在路由中传递参数/</id>
+    <published>2018-10-04T13:53:16.000Z</published>
+    <updated>2018-10-04T14:03:34.000Z</updated>
+    
+    <content type="html"><![CDATA[<ol><li>修改路由配置中的path属性,使其可以携带参数 <code>path: &#39;product/:id&#39;</code> path的参数后加上 <code>/:id</code> 名为id变量</li></ol><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> routes: Routes = [</span><br><span class="line">  &#123;path: <span class="string">''</span>, redirectTo: <span class="string">'/home'</span>, pathMatch: <span class="string">'full'</span>&#125;,</span><br><span class="line">  &#123;path: <span class="string">'chat'</span>, component: ChatComponent, outlet: <span class="string">'aux'</span>&#125;,</span><br><span class="line">  &#123;path: <span class="string">'home'</span>, component: HomeComponent&#125;,</span><br><span class="line"></span><br><span class="line">  &#123;path: <span class="string">'product/:id'</span>, component: ProductComponent,</span><br><span class="line">    children: [</span><br><span class="line">      &#123;path: <span class="string">''</span>, component: ProductDescComponent&#125;,</span><br><span class="line">      &#123;path: <span class="string">'seller/:id'</span>, component: SellerINfoComponent&#125;</span><br><span class="line">  ],canActivate: [LoginGuard],canDeactivate: [UnsavedGuard],</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    product: ProductResolve</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br><span class="line">  &#123;path: <span class="string">'**'</span>, component: Code404Component&#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure><ol start="2"><li>修改路由链接的参数来传递参数</li></ol><p><code>&lt;a [routerLink]=&quot;[&#39;/product&#39;, 2]&quot; &gt;商品详情页&lt;/a&gt;</code></p><ol start="3"><li>在控制器中修改代码</li></ol><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ngOnInit() &#123;</span><br><span class="line">   <span class="comment">// 参数订阅 订阅后声明一个匿名函数传进来之后从参数中取出ID赋值给本地的product</span></span><br><span class="line">   <span class="comment">// subscribe rxjs的语法</span></span><br><span class="line">   <span class="keyword">this</span>.routeInfo.params.subscribe(<span class="function">(<span class="params">params: Params</span>) =&gt;</span> <span class="keyword">this</span>.productId = params[<span class="string">'id'</span>]);</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ol&gt;
+&lt;li&gt;修改路由配置中的path属性,使其可以携带参数 &lt;code&gt;path: &amp;#39;product/:id&amp;#39;&lt;/code&gt; path的参数后加上 &lt;code&gt;/:id&lt;/code&gt; 名为id变量&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure class=&quot;high
+      
+    
+    </summary>
+    
+    
+      <category term="Angular6" scheme="http://liugan96.top/tags/angular6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo 在layout 为 draft 的情况使用记录</title>
+    <link href="http://liugan96.top/2018/10/04/Hexo%20%E5%9C%A8layout%20%E4%B8%BA%20draft%20%E7%9A%84%E6%83%85%E5%86%B5%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/"/>
+    <id>http://liugan96.top/2018/10/04/Hexo 在layout 为 draft 的情况使用记录/</id>
+    <published>2018-10-04T10:24:16.000Z</published>
+    <updated>2019-01-05T14:02:58.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>layout 为 draft 的情况<br>通过以上的学习，我们大概了解了一般情况下生成一篇博客的流程以及各个内容设置对页面效果的影响。那么我们现在学习一下  <code>hexo new draft myDraftBlog</code> 的情况。在没有执行这个命令之前，你可以去看下你的<code>source</code>文件夹，如果你是按照我之前的文章一步步进行的话，你会发现其中只有<code>_post</code>一个文件夹。</p><p>当我们执行上面的命令之后，类似<code>post</code>一样，我们同样会发现在根目录下<code>source/_drafts</code>文件夹中会出现一个<code>myDraftBlog.md</code>的文件。也就是说，<code>_draft</code>文件夹和里面的内容是你执行上述命令之后生成的。同样的，你开始编辑<code>myDraftBlog.md</code>文件，然后保存。</p><p>以此执行<code>hexo g</code> 和 <code>hexo s</code> 命令，打开4000端口之后你会发现，你完全看不到你刚才编辑的<code>myDraftBlog</code>这篇博客。这是为什么呢？因为<code>layout</code> 为 <code>draft</code>的时候，其实这个md文件是草稿状态，也就是说，这篇文章仅仅是作为你的草稿而不是正式稿，所以不会发表在博客主页上。草稿就是需要你不断完善的文章，知道有一天你觉得这篇文章可以正式发表了，那么如何才能将草稿发表成为正式稿件呢？官方文档其实有非常详细的说明：<br><img src="http://oakland.github.io/2016/05/02/hexo-%E5%A6%82%E4%BD%95%E7%94%9F%E6%88%90%E4%B8%80%E7%AF%87%E6%96%B0%E7%9A%84post/1462185994268.png" alt="Drafts"><br>上面的官方文档会告诉你，通过<code>publish</code>命令可以将<code>draft</code>移动到<code>_post</code>文件夹下，形成正式的博客。也就是说，当你认为你的草稿已经完善到可以发表的状态时，执行<code>hexo publish draft myDraftBlog.md</code>，你就会发现，<code>source/_draft</code>文件夹下的<code>myDraftBlog.md</code>文件消失了，而在<code>_post</code>文件夹下你会找到<code>myDraftBlog.md</code>文件。这个时候再按照生成<code>post</code>文件的方式，依次执行<code>hexo g hexo d</code> 就可以将这篇草稿正式转为发表在网上的博客了。</p><p>因此，<code>draft</code>都是草稿，需要和<code>publish</code>命令配合使用。</p><p>当然，根据上面的官网说明，如果我们一定要查看我们的草稿，我们可以使用<code>hexo g --draft</code>， <code>hexo s --draft</code>命令来在本地预览我们的草稿效果。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;layout 为 draft 的情况&lt;br&gt;通过以上的学习，我们大概了解了一般情况下生成一篇博客的流程以及各个内容设置对页面效果的影响。那么我们现在学习一下  &lt;code&gt;hexo new draft myDraftBlog&lt;/code&gt; 的情况。在没有执行这个命令之前，你
+      
+    
+    </summary>
+    
+    
+      <category term="Hexo" scheme="http://liugan96.top/tags/hexo/"/>
+    
+  </entry>
+  
+</feed>
