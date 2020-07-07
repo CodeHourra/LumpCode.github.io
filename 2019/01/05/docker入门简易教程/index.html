@@ -103,13 +103,13 @@
 
 
 
-  <meta name="description" content="[TOC] 一. Docker简介关于Docker的介绍网上已经有了不少,简单来说,Docker是一种容器技术,但是是经过改进的容器技术,其改进的地方在于Docker容器引入了镜像,使的容器的创建和迁移变得方便快捷不少  Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括VMs（虚拟机）、">
+  <meta name="description" content="一. Docker简介关于Docker的介绍网上已经有了不少,简单来说,Docker是一种容器技术,但是是经过改进的容器技术,其改进的地方在于Docker容器引入了镜像,使的容器的创建和迁移变得方便快捷不少  Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括VMs（虚拟机）、bare m">
 <meta name="keywords" content="Docker">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker入门简易教程">
 <meta property="og:url" content="http://liugan96.top/2019/01/05/docker入门简易教程/index.html">
 <meta property="og:site_name" content="温良恭俭让">
-<meta property="og:description" content="[TOC] 一. Docker简介关于Docker的介绍网上已经有了不少,简单来说,Docker是一种容器技术,但是是经过改进的容器技术,其改进的地方在于Docker容器引入了镜像,使的容器的创建和迁移变得方便快捷不少  Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括VMs（虚拟机）、">
+<meta property="og:description" content="一. Docker简介关于Docker的介绍网上已经有了不少,简单来说,Docker是一种容器技术,但是是经过改进的容器技术,其改进的地方在于Docker容器引入了镜像,使的容器的创建和迁移变得方便快捷不少  Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括VMs（虚拟机）、bare m">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://liugan96.top/2019/01/05/docker入门简易教程/dockerVersion.png">
 <meta property="og:image" content="http://liugan96.top/2019/01/05/docker入门简易教程/dockerSearch.png">
@@ -123,10 +123,10 @@
 <meta property="og:image" content="http://liugan96.top/2019/01/05/docker入门简易教程/run.png">
 <meta property="og:image" content="http://liugan96.top/2019/01/05/docker入门简易教程/dockerps.png">
 <meta property="og:image" content="http://liugan96.top/2019/01/05/docker入门简易教程/dockerinspect.png">
-<meta property="og:updated_time" content="2019-01-05T14:15:02.000Z">
+<meta property="og:updated_time" content="2020-07-07T13:33:27.221Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker入门简易教程">
-<meta name="twitter:description" content="[TOC] 一. Docker简介关于Docker的介绍网上已经有了不少,简单来说,Docker是一种容器技术,但是是经过改进的容器技术,其改进的地方在于Docker容器引入了镜像,使的容器的创建和迁移变得方便快捷不少  Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括VMs（虚拟机）、">
+<meta name="twitter:description" content="一. Docker简介关于Docker的介绍网上已经有了不少,简单来说,Docker是一种容器技术,但是是经过改进的容器技术,其改进的地方在于Docker容器引入了镜像,使的容器的创建和迁移变得方便快捷不少  Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括VMs（虚拟机）、bare m">
 <meta name="twitter:image" content="http://liugan96.top/2019/01/05/docker入门简易教程/dockerVersion.png">
 
 
@@ -480,12 +480,24 @@
                 
               
 
-              <time title="创建时间：2019-01-05 22:14:26 / 修改时间：22:15:02" itemprop="dateCreated datePublished" datetime="2019-01-05T22:14:26+08:00">2019-01-05</time>
+              <time title="创建时间：2019-01-05 22:14:26" itemprop="dateCreated datePublished" datetime="2019-01-05T22:14:26+08:00">2019-01-05</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-07-07 21:33:27" itemprop="dateModified" datetime="2020-07-07T21:33:27+08:00">2020-07-07</time>
               
             
           </span>
@@ -568,8 +580,7 @@
       
 
       
-        <p>[TOC]</p>
-<h2 id="一-Docker简介"><a href="#一-Docker简介" class="headerlink" title="一. Docker简介"></a>一. Docker简介</h2><p>关于<code>Docker</code>的介绍网上已经有了不少,简单来说,<code>Docker</code>是一种容器技术,但是是经过改进的容器技术,其改进的地方在于<code>Docker</code>容器引入了镜像,使的容器的创建和迁移变得方便快捷不少</p>
+        <h2 id="一-Docker简介"><a href="#一-Docker简介" class="headerlink" title="一. Docker简介"></a>一. Docker简介</h2><p>关于<code>Docker</code>的介绍网上已经有了不少,简单来说,<code>Docker</code>是一种容器技术,但是是经过改进的容器技术,其改进的地方在于<code>Docker</code>容器引入了镜像,使的容器的创建和迁移变得方便快捷不少</p>
 <blockquote>
 <p>Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括<code>VMs</code>（虚拟机）、<a href="http://www.whatis.com.cn/word_5275.htm" target="_blank" rel="noopener">bare metal</a>、<code>OpenStack</code> 集群和其他的基础应用平台。</p>
 </blockquote>
@@ -800,7 +811,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -841,7 +852,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -942,7 +955,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -956,7 +969,7 @@
     
       <span class="post-meta-item-text">站点总字数：</span>
     
-    <span title="站点总字数">18k</span>
+    <span title="站点总字数">89k</span>
   
 
   
@@ -967,7 +980,7 @@
     
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
     
-    <span title="站点阅读时长">16 分钟</span>
+    <span title="站点阅读时长">1:21</span>
   
 </div>
 
